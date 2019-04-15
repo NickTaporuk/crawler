@@ -1,8 +1,14 @@
 package parser
 
 import (
+	"fmt"
+	"github.com/antchfx/htmlquery"
 	"log"
-	"time"
+)
+
+const (
+	NowostroikiUri       = "https://novostroyki.lun.ua/жк-итальянский-квартал-киев"
+	NewBuildingCardXPath = `//*[@class="card-grid-cell"]`
 )
 
 // createTask returns an example task that sleeps for the specified
@@ -10,6 +16,16 @@ import (
 func LunParser() func(int) {
 	return func(id int) {
 		log.Printf("Processor - Task #%d.", id)
-		time.Sleep(33 * time.Minute)
+
+		doc, err := htmlquery.LoadURL(NowostroikiUri)
+
+		if err != nil {
+			panic(err)
+		}
+
+		list := htmlquery.Find(doc, NewBuildingCardXPath)
+
+		fmt.Println("LIST:=>", list)
 	}
+
 }
